@@ -5,10 +5,10 @@ import fetch from 'isomorphic-fetch';
 import { connect } from 'react-redux';
 import logo from './logo.svg';
 import './App.css';
-import Queue from './Children/Queue/Queue';
-import VideoContent from './Children/VideoContent/VideoContent';
-import Chat from './Children/Chat/Chat';
-import NoRoom from './Children/NoRoom';
+import Queue from './components/Queue/Queue';
+import VideoContent from './components/VideoContent/VideoContent';
+import Chat from './components/Chat/Chat';
+import NoRoom from './components/NoRoom';
 import * as actions from './actions/actions';
 import ClientSocket from './ClientSocket';
 

@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import fetch from 'isomorphic-fetch';
-import SearchResult from './Children/SearchResult';
+import SearchResults from './Search/SearchResults';
+import RoomQueue from './RoomQueue/RoomQueue';
+import MyQueue from './MyQueue/MyQueue';
+import History from './History/History';
 import './Queue.css';
 
 const mapStateToProps = state => ({
@@ -83,32 +86,10 @@ class ConnectedQueue extends Component {
         <div className="queue-list">
           <table>
             <tbody>
-              {this.state.chosenView === 'queue' ? this.props.queue.map((queueItem, index) => <tr key={`queue-row-item-${index}`}><td>{queueItem.linkName}{index === 0 ? <i className="fas fa-headphones" /> : null}<br /><span id="postedBy">Added by: {queueItem.userName}</span></td></tr>) : null}
-              {this.state.chosenView === 'history' ? this.props.history.map((historyItem, index) => <tr key={`history-row-item${index}`}><td>{historyItem.linkName}<br /><span id="postedBy">Added by: {historyItem.userName}</span></td></tr>) : null}
-              {this.state.chosenView === 'myQueue' ?
-              this.props.queue
-                .filter(queueItem => queueItem.userName === this.props.user.userName)
-                .map((queueItem, index) =>
-                (
-                  <tr key={`queue-row-item-${index}`}>
-                    <td>{queueItem.linkName}<br />
-                      <span id="postedBy">Added by: {queueItem.userName}</span>
-                    </td>
-                  </tr>
-                ))
-              :
-              null}
-              {this.state.chosenView === 'searchResults' ?
-              this.state.searchResults
-                .map((searchItem, index) => (
-                  <tr key={`search-result-item-${index}`}>
-                    <SearchResult
-                      searchItem={searchItem}
-                      addToPlaylist={this.props.addToPlaylist}
-                      userId={this.props.user.userId}
-                      roomId={this.props.roomId}
-                    />
-                  </tr>)) : null}
+              {this.state.chosenView === 'queue' && <RoomQueue />}
+              {this.state.chosenView === 'history' && <History />}
+              {this.state.chosenView === 'myQueue' && <MyQueue />}
+              {this.state.chosenView === 'searchResults' && <SearchResults />}
             </tbody>
           </table>
         </div>
