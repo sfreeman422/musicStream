@@ -7,6 +7,8 @@ const youtube = require('./routes/youtube');
 const auth = require('./routes/auth');
 const connection = require('./db/database');
 
+const wordnikApiKey = process.env.wordnikApi;
+
 const port = process.env.PORT || 3000;
 const app = express();
 
@@ -26,36 +28,44 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '/public/index.html'));
 });
 
-let LEADING_TIME = 0;
+async function getRandomUserName() {
+  const randomAdj = await fetch(`https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=adjective&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&api_key=${wordnikApiKey}`)
+    .then(res => res.json())
+    .then(adj => adj.word);
+  const randomNoun = await fetch(`https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=noun&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&api_key=${wordnikApiKey}`)
+    .then(res => res.json())
+    .then(noun => noun.word);
+  const userName = randomAdj.charAt(0).toUpperCase() + randomAdj.slice(1) + randomNoun.charAt(0).toUpperCase() + randomNoun.slice(1);
+  return userName;
+}
 
-io.sockets.on('connection', (socket) => {
-  const shittyNouns = ['Guy', 'Cat', 'Car', 'Chicken', 'Clown', 'Pearl', 'Son', 'Father'];
-  const shittyAdjectives = ['Beautiful', 'Flaming', 'Hungry', 'Upset', 'Angry', 'Happy', 'Whatever'];
-  // Use this link, including the API key
-  // In order to get random nouns/adjectives for user account creation.
-  // https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=adjective&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&api_key=YOURAPIKEY
+io.sockets.on('connection', async (socket) => {
+  let LEADING_TIME = 0;
+  const randomUserName = await getRandomUserName();
   const user = {
-    userName: shittyAdjectives[Math.floor(Math.random() * Math.floor(shittyAdjectives.length - 1))] + shittyNouns[Math.floor(Math.random() * Math.floor(shittyNouns.length - 1))],
+    userName: randomUserName,
     userId: undefined,
   };
 
   connection.query(`INSERT INTO users (userName, pass, email, isPublic, isInUse) VALUES ('${user.userName}', 'fakepassword', '${user.userName}@fake.com', true, true)`, (error, results) => {
     if (error) {
-      console.log('MYSQL Error on inserting temp user...');
+      console.log(`MYSQL Error on inserting temp user: ${user.userName}`);
       console.log('sending back other random, public userId...');
       connection.query('SELECT * FROM users WHERE isPublic = true AND isInUse = false', (publicErr, publicResult) => {
         if (publicErr) {
           console.error(publicErr);
         } else {
+          console.log('Received all available users as ', publicResult);
           console.log('Sending back user: ', publicResult[0]);
           user.userId = publicResult[0].userId;
+          user.userName = publicResult[0].userName;
           socket.emit('connected', user);
         }
       });
     } else {
       user.userId = results.insertId;
       socket.emit('connected', user);
-      console.log('Successfully added temp user to the DB');
+      console.log(`Successfully added temp user to the DB: ${user.userName}`);
     }
   });
 
@@ -70,27 +80,23 @@ io.sockets.on('connection', (socket) => {
   });
 
   // Listen for queue related events.
-  socket.on('queueChange', (message) => {
-    console.log(message);
+  socket.on('queueChange', () => {
     io.emit('queueChanged');
   });
 
-  socket.on('markPlayed', (message) => {
-    console.log(message);
+  socket.on('markPlayed', () => {
     LEADING_TIME = 0;
     io.emit('syncWithServer', LEADING_TIME);
     io.emit('queueChanged');
   });
 
-  socket.on('addVideo', (message) => {
-    console.log(message);
+  socket.on('addVideo', () => {
     io.emit('queueChanged');
   });
 
   // Listen for chat related events
   socket.on('message', (message) => {
-    console.log(message);
-    io.emit('messageReceived');
+    io.emit('messageReceived', message);
   });
 
   // Handles a voting situation.
@@ -104,8 +110,8 @@ io.sockets.on('connection', (socket) => {
   socket.on('timeSync', (time) => {
     if (time > LEADING_TIME) {
       LEADING_TIME = time;
-      io.emit('syncWithServer', LEADING_TIME);
     }
+    io.emit('syncWithServer', LEADING_TIME);
   });
 });
 

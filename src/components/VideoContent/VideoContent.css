@@ -1,0 +1,14 @@
+.video-content {
+  height: 100%;
+}
+.video-content-section{
+  display: subgrid;
+  grid-column-start: col2;
+  grid-column-end: col3-margin;
+  grid-row-start: content-area;
+}
+
+iframe{
+  height: 90%;
+  width: 100%;
+}

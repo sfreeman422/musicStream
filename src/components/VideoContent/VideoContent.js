@@ -4,6 +4,7 @@ import YouTube from 'react-youtube';
 import PropTypes from 'prop-types';
 import ThumbsButton from './Children/ThumbsButton';
 import ClientSocket from '../../ClientSocket';
+import './VideoContent.css';
 
 // Options to interact with the react-youtube component.
 const options = {

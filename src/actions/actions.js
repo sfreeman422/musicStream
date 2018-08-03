@@ -34,3 +34,8 @@ export const setUser = user => ({
   type: types.SET_USER,
   payload: user,
 });
+
+export const updateMessages = message => ({
+  type: types.UPDATE_MESSAGES,
+  payload: message,
+});

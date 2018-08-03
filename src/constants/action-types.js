@@ -6,3 +6,4 @@ export const SET_ROOM_ERROR = 'SET_ROOM_ERROR';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 export const UPDATE_CLIENT = 'UPDATE_CLIENT';
 export const SET_USER = 'SET_USER';
+export const UPDATE_MESSAGES = 'UPDATE_MESSAGES';

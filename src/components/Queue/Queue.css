@@ -1,0 +1,27 @@
+.queue {
+  grid-column-start: col1;
+  grid-column-end: col1-margin;
+  grid-row-start: content-area;
+  max-height: 100%;
+  height: 100%;
+  max-width: 100%;
+}
+
+.queue-list {
+  height: 90%;
+  max-height:90%;
+  overflow: scroll;
+}
+
+.queue-buttons {
+  height: 10%;
+  max-height:10%;
+}
+
+.fa-headphones {
+  float: right;
+}
+
+#postedBy{
+  font-size: 75%;
+}

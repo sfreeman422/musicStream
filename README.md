@@ -6,7 +6,8 @@ Allow for a unique, fun way for users to share and talk about YouTube content wh
 
 ## How to Run
 1. Fork/clone this repo.
-2. `npm install`
-3. `nodemon server.js`
-4. `npm run start`
+2. Get an API key from wordNik and store it in your environment variables.
+3. `npm install`
+4. `nodemon server.js`
+5. `npm run start`
 

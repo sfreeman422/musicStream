@@ -1,0 +1,4 @@
+.no-room {
+  grid-column-start: col1;
+  grid-column-end: right-margin;
+}

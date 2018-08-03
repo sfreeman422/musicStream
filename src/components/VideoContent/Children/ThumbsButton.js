@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './ThumbsButton.css';
 
 // Renders a thumbsUp or thumbsDown button based on the props passed in.
 const ThumbsButton = props => (

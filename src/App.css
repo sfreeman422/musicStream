@@ -9,8 +9,8 @@
 
 .App-header {
   background-color: #222;
-  height: 20%;
-  padding: 20px;
+  height: 10%;
+  max-height: 10%;
   color: white;
 }
 
@@ -22,94 +22,37 @@
   font-size: large;
 }
 
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
 }
 
-td, th, .chat > .message-area {
+td, th {
   border: 1px solid #dddddd;
   text-align: left;
-  padding: 8px;
 }
 
 tr:nth-child(even) {
   background-color: #dddddd;
 }
-iframe{
-  height: 100%;
-  width: 100%;
-}
+
 input {
   width: 80%;
 }
+
 .fas {
   color: black;
 }
-.resultButtons {
-  text-align: center;
-}
-#thumbnail{
-  height:50px;
-  width:50px;
-}
+
 .container {
   display: grid;
   grid-template-columns: [left-margin] 1% [col1] 20% [col1-margin] 1% [col2] 56% [col3-margin] 1% [col3] 20% [right-margin] 1%;
   grid-template-rows: [top-margin] 1% [content-area] 98% [bottom-margin] 1%;
   height: 65vh;
-}
-.no-room {
-  grid-column-start: col1;
-  grid-column-end: right-margin;
-}
-.queue {
-  grid-column-start: col1;
-  grid-column-end: col1-margin;
-  grid-row-start: content-area;
-  max-height: 100%;
-  height: 100%;
-  max-width: 100%;
-}
-.video-content {
-  height: 100%;
-}
-.video-content-section{
-  display: subgrid;
-  grid-column-start: col2;
-  grid-column-end: col3-margin;
-  grid-row-start: content-area;
-}
-.thumbs {
-  display: inline-block;
-  width: 25%;
-  font-size: 24px;
-}
-.chat {
-  grid-column-start: col3;
-  grid-column-end: right-margin;
-  grid-row-start: content-area;
-  height: 90%;
-}
-.message-area {
-  height: 90%;
-}
-.message-input-area {
-  height: 10%;
-}
-.fa-headphones {
-  float: right;
-}
-
-.user-login-box, .user-password-box {
-  max-width: 5%;
-}
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-#postedBy{
-  font-size: 75%;
 }
